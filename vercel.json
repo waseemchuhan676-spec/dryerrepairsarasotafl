@@ -1,0 +1,81 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/about.html",
+      "destination": "/about",
+      "permanent": true
+    },
+    {
+      "source": "/appliance-bee-ridge.html",
+      "destination": "/appliance-bee-ridge",
+      "permanent": true
+    },
+    {
+      "source": "/appliance-gulf-gate-estates.html",
+      "destination": "/appliance-gulf-gate-estates",
+      "permanent": true
+    },
+    {
+      "source": "/appliance-palmer-ranch.html",
+      "destination": "/appliance-palmer-ranch",
+      "permanent": true
+    },
+    {
+      "source": "/blog.html",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/contact.html",
+      "destination": "/contact",
+      "permanent": true
+    },
+    {
+      "source": "/dryer-belt-replacement.html",
+      "destination": "/dryer-belt-replacement",
+      "permanent": true
+    },
+    {
+      "source": "/dryer-not-heating-repair.html",
+      "destination": "/dryer-not-heating-repair",
+      "permanent": true
+    },
+    {
+      "source": "/dryer-not-starting-repair.html",
+      "destination": "/dryer-not-starting-repair",
+      "permanent": true
+    },
+    {
+      "source": "/electric-dryer-repair.html",
+      "destination": "/electric-dryer-repair",
+      "permanent": true
+    },
+    {
+      "source": "/gas-dryer-repair.html",
+      "destination": "/gas-dryer-repair",
+      "permanent": true
+    },
+    {
+      "source": "/locations.html",
+      "destination": "/locations",
+      "permanent": true
+    },
+    {
+      "source": "/privacy-policy.html",
+      "destination": "/privacy-policy",
+      "permanent": true
+    },
+    {
+      "source": "/services.html",
+      "destination": "/services",
+      "permanent": true
+    }
+  ]
+}
