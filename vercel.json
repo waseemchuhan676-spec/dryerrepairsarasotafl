@@ -53,6 +53,31 @@
       "permanent": true
     },
     {
+      "source": "/dryer-vent-cleaning.html",
+      "destination": "/dryer-vent-cleaning",
+      "permanent": true
+    },
+    {
+      "source": "/dryer-noise-repair.html",
+      "destination": "/dryer-noise-repair",
+      "permanent": true
+    },
+    {
+      "source": "/dryer-taking-too-long-to-dry.html",
+      "destination": "/dryer-taking-too-long-to-dry",
+      "permanent": true
+    },
+    {
+      "source": "/dryer-drum-not-spinning.html",
+      "destination": "/dryer-drum-not-spinning",
+      "permanent": true
+    },
+    {
+      "source": "/emergency-dryer-repair.html",
+      "destination": "/emergency-dryer-repair",
+      "permanent": true
+    },
+    {
       "source": "/electric-dryer-repair.html",
       "destination": "/electric-dryer-repair",
       "permanent": true
@@ -75,6 +100,36 @@
     {
       "source": "/services.html",
       "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/dryer-repair-siesta-key.html",
+      "destination": "/dryer-repair-siesta-key",
+      "permanent": true
+    },
+    {
+      "source": "/dryer-repair-lakewood-ranch.html",
+      "destination": "/dryer-repair-lakewood-ranch",
+      "permanent": true
+    },
+    {
+      "source": "/dryer-repair-venice.html",
+      "destination": "/dryer-repair-venice",
+      "permanent": true
+    },
+    {
+      "source": "/dryer-repair-longboat-key.html",
+      "destination": "/dryer-repair-longboat-key",
+      "permanent": true
+    },
+    {
+      "source": "/dryer-repair-downtown-sarasota.html",
+      "destination": "/dryer-repair-downtown-sarasota",
+      "permanent": true
+    },
+    {
+      "source": "/dryer-repair-osprey.html",
+      "destination": "/dryer-repair-osprey",
       "permanent": true
     }
   ]
