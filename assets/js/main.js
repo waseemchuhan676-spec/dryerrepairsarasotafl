@@ -194,10 +194,121 @@ function initLeadForms() {
   });
 }
 
+/* Interactive click-to-expand neighborhoods, search filter, and chip action */
+function initLandmarkNeighborhoods() {
+  const cards = document.querySelectorAll(".gmap-landmark-card");
+  if (!cards.length) return;
+
+  // 1. Accordion Drawer toggle
+  cards.forEach((card) => {
+    const toggleBtn = card.querySelector(".gmap-hoods-toggle");
+    const collapsePanel = card.querySelector(".gmap-hoods-collapse");
+    if (!toggleBtn || !collapsePanel) return;
+
+    const toggle = (forceState) => {
+      const isOpen = toggleBtn.getAttribute("aria-expanded") === "true";
+      const nextState = typeof forceState === "boolean" ? forceState : !isOpen;
+      toggleBtn.setAttribute("aria-expanded", String(nextState));
+      collapsePanel.classList.toggle("is-open", nextState);
+    };
+
+    toggleBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggle();
+    });
+
+    // Clicking anywhere on card outside direct actions
+    card.addEventListener("click", (e) => {
+      if (e.target.closest("a") || e.target.closest("button") || e.target.closest(".gmap-hood-chip")) return;
+      toggle();
+    });
+
+    // 2. Chip click action -> direct call to dispatch
+    const chips = card.querySelectorAll(".gmap-hood-chip");
+    chips.forEach((chip) => {
+      chip.addEventListener("click", (e) => {
+        e.stopPropagation();
+        window.location.href = "tel:9411234567";
+      });
+    });
+  });
+
+  // 3. Live Search & Filter Bar
+  const searchInput = document.getElementById("gmap-landmark-search");
+  const clearBtn = document.getElementById("gmap-search-clear");
+  const countTag = document.getElementById("gmap-search-count");
+
+  if (searchInput) {
+    const totalCount = cards.length;
+
+    const filterCards = (query) => {
+      const q = (query || "").toLowerCase().trim();
+      let matchCount = 0;
+
+      cards.forEach((card) => {
+        const textContent = (card.textContent || "").toLowerCase();
+        const keywords = (card.getAttribute("data-keywords") || "").toLowerCase();
+        const isMatch = !q || textContent.includes(q) || keywords.includes(q);
+
+        card.style.display = isMatch ? "flex" : "none";
+
+        if (isMatch) {
+          matchCount++;
+          // If user searched a specific term, auto-expand matching drawers
+          if (q.length >= 2) {
+            const collapsePanel = card.querySelector(".gmap-hoods-collapse");
+            const toggleBtn = card.querySelector(".gmap-hoods-toggle");
+            if (collapsePanel && toggleBtn) {
+              collapsePanel.classList.add("is-open");
+              toggleBtn.setAttribute("aria-expanded", "true");
+            }
+          }
+        }
+      });
+
+      if (clearBtn) {
+        clearBtn.hidden = !q;
+      }
+
+      if (countTag) {
+        if (!q) {
+          countTag.textContent = "Showing all " + totalCount + " service hubs";
+        } else if (matchCount === 0) {
+          countTag.textContent = "0 matches for \"" + query + "\" — Call 941-123-4567 for any Sarasota ZIP";
+        } else {
+          countTag.textContent = "Found " + matchCount + " matching location" + (matchCount > 1 ? "s" : "");
+        }
+      }
+    };
+
+    searchInput.addEventListener("input", (e) => {
+      filterCards(e.target.value);
+    });
+
+    if (clearBtn) {
+      clearBtn.addEventListener("click", () => {
+        searchInput.value = "";
+        filterCards("");
+        searchInput.focus();
+        cards.forEach((card) => {
+          const collapsePanel = card.querySelector(".gmap-hoods-collapse");
+          const toggleBtn = card.querySelector(".gmap-hoods-toggle");
+          if (collapsePanel && toggleBtn) {
+            collapsePanel.classList.remove("is-open");
+            toggleBtn.setAttribute("aria-expanded", "false");
+          }
+        });
+      });
+    }
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initNavigation();
   initOfferCodes();
   initNewsletter();
   initLeadForms();
   initReveal();
+  initLandmarkNeighborhoods();
 });
+
