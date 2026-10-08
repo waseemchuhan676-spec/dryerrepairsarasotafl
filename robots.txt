@@ -2,4 +2,4 @@
 Allow: /
 Disallow: /api/
 
-Sitemap: https://dryerrepairsarasotafl-six.vercel.app/sitemap.xml
+Sitemap: https://dryerrepairsarasotafl.com/sitemap.xml

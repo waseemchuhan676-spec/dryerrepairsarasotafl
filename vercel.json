@@ -3,6 +3,28 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "dryerrepairsarasotafl-six.vercel.app"
+        }
+      ],
+      "destination": "https://dryerrepairsarasotafl.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.dryerrepairsarasotafl.com"
+        }
+      ],
+      "destination": "https://dryerrepairsarasotafl.com/:path*",
+      "permanent": true
+    },
+    {
       "source": "/index.html",
       "destination": "/",
       "permanent": true
