@@ -194,12 +194,38 @@ function initLeadForms() {
   });
 }
 
-/* Interactive click-to-expand neighborhoods, search filter, and chip action */
+/* Interactive click-to-expand neighborhoods, search filter, and ZIP checker */
 function initLandmarkNeighborhoods() {
   const cards = document.querySelectorAll(".gmap-landmark-card");
   if (!cards.length) return;
 
-  // 1. Accordion Drawer toggle
+  const toggleAllBtn = document.getElementById("gmap-toggle-view-all");
+  const searchInput = document.getElementById("gmap-landmark-search");
+  const clearBtn = document.getElementById("gmap-search-clear");
+  const countTag = document.getElementById("gmap-search-count");
+  const zipPills = document.querySelectorAll(".zip-pill");
+  const zipResult = document.getElementById("zip-result");
+  const zipResultName = document.getElementById("zip-result-name");
+  const zipResultEta = document.getElementById("zip-result-eta");
+
+  // Show all cards naturally
+  const showAllCards = () => {
+    cards.forEach((card) => {
+      card.style.display = "";
+      card.classList.remove("gmap-card-collapsed");
+    });
+    if (toggleAllBtn) {
+      toggleAllBtn.style.display = "none";
+    }
+    if (countTag) {
+      countTag.textContent = `Showing all ${cards.length} service hubs`;
+    }
+  };
+
+  // Run initial state
+  showAllCards();
+
+  // 1. Accordion Drawer toggle on cards
   cards.forEach((card) => {
     const toggleBtn = card.querySelector(".gmap-hoods-toggle");
     const collapsePanel = card.querySelector(".gmap-hoods-collapse");
@@ -217,7 +243,7 @@ function initLandmarkNeighborhoods() {
       toggle();
     });
 
-    // Clicking anywhere on card outside direct actions
+    // Clicking anywhere on card outside direct links/buttons
     card.addEventListener("click", (e) => {
       if (e.target.closest("a") || e.target.closest("button") || e.target.closest(".gmap-hood-chip")) return;
       toggle();
@@ -234,53 +260,55 @@ function initLandmarkNeighborhoods() {
   });
 
   // 3. Live Search & Filter Bar
-  const searchInput = document.getElementById("gmap-landmark-search");
-  const clearBtn = document.getElementById("gmap-search-clear");
-  const countTag = document.getElementById("gmap-search-count");
+  const filterCards = (query) => {
+    const q = (query || "").toLowerCase().trim();
+    let matchCount = 0;
+
+    if (!q) {
+      showAllCards();
+      if (clearBtn) clearBtn.hidden = true;
+      return;
+    }
+
+    // Query active: filter cards by query
+    cards.forEach((card) => {
+      card.classList.remove("gmap-card-collapsed");
+      const textContent = (card.textContent || "").toLowerCase();
+      const keywords = (card.getAttribute("data-keywords") || "").toLowerCase();
+      const isMatch = textContent.includes(q) || keywords.includes(q);
+
+      card.style.display = isMatch ? "flex" : "none";
+
+      if (isMatch) {
+        matchCount++;
+        // Auto-expand drawer on matches for direct neighborhood visibility
+        const collapsePanel = card.querySelector(".gmap-hoods-collapse");
+        const toggleBtn = card.querySelector(".gmap-hoods-toggle");
+        if (collapsePanel && toggleBtn) {
+          collapsePanel.classList.add("is-open");
+          toggleBtn.setAttribute("aria-expanded", "true");
+        }
+      }
+    });
+
+    if (toggleAllBtn) {
+      toggleAllBtn.style.display = "none";
+    }
+
+    if (clearBtn) {
+      clearBtn.hidden = false;
+    }
+
+    if (countTag) {
+      if (matchCount === 0) {
+        countTag.textContent = `0 matches for "${query}" — Call 941-123-4567 for any Sarasota ZIP`;
+      } else {
+        countTag.textContent = `Found ${matchCount} matching hub${matchCount > 1 ? "s" : ""} in service area`;
+      }
+    }
+  };
 
   if (searchInput) {
-    const totalCount = cards.length;
-
-    const filterCards = (query) => {
-      const q = (query || "").toLowerCase().trim();
-      let matchCount = 0;
-
-      cards.forEach((card) => {
-        const textContent = (card.textContent || "").toLowerCase();
-        const keywords = (card.getAttribute("data-keywords") || "").toLowerCase();
-        const isMatch = !q || textContent.includes(q) || keywords.includes(q);
-
-        card.style.display = isMatch ? "flex" : "none";
-
-        if (isMatch) {
-          matchCount++;
-          // If user searched a specific term, auto-expand matching drawers
-          if (q.length >= 2) {
-            const collapsePanel = card.querySelector(".gmap-hoods-collapse");
-            const toggleBtn = card.querySelector(".gmap-hoods-toggle");
-            if (collapsePanel && toggleBtn) {
-              collapsePanel.classList.add("is-open");
-              toggleBtn.setAttribute("aria-expanded", "true");
-            }
-          }
-        }
-      });
-
-      if (clearBtn) {
-        clearBtn.hidden = !q;
-      }
-
-      if (countTag) {
-        if (!q) {
-          countTag.textContent = "Showing all " + totalCount + " service hubs";
-        } else if (matchCount === 0) {
-          countTag.textContent = "0 matches for \"" + query + "\" — Call 941-123-4567 for any Sarasota ZIP";
-        } else {
-          countTag.textContent = "Found " + matchCount + " matching location" + (matchCount > 1 ? "s" : "");
-        }
-      }
-    };
-
     searchInput.addEventListener("input", (e) => {
       filterCards(e.target.value);
     });
@@ -288,6 +316,8 @@ function initLandmarkNeighborhoods() {
     if (clearBtn) {
       clearBtn.addEventListener("click", () => {
         searchInput.value = "";
+        zipPills.forEach((p) => p.classList.remove("active"));
+        if (zipResult) zipResult.classList.remove("is-active");
         filterCards("");
         searchInput.focus();
         cards.forEach((card) => {
@@ -301,6 +331,64 @@ function initLandmarkNeighborhoods() {
       });
     }
   }
+
+  // 4. Interactive ZIP Code Coverage Pills
+  zipPills.forEach((pill) => {
+    pill.addEventListener("click", () => {
+      const zip = pill.getAttribute("data-zip") || "";
+      const zone = pill.getAttribute("data-zone") || zip;
+      const eta = pill.getAttribute("data-eta") || "10-15 min";
+
+      zipPills.forEach((p) => p.classList.remove("active"));
+      pill.classList.add("active");
+
+      if (zip === "all") {
+        if (searchInput) searchInput.value = "";
+        showAllCards();
+        if (clearBtn) clearBtn.hidden = true;
+        if (zipResult) {
+          if (zipResultName) zipResultName.textContent = "All Sarasota County Service Hubs";
+          if (zipResultEta) zipResultEta.textContent = "Same-Day Priority Mobile Response";
+          zipResult.classList.add("is-active");
+        }
+      } else {
+        if (searchInput) searchInput.value = zip;
+        filterCards(zip);
+        if (zipResult) {
+          if (zipResultName) zipResultName.textContent = `${zone} (${zip})`;
+          if (zipResultEta) zipResultEta.textContent = eta;
+          zipResult.classList.add("is-active");
+        }
+      }
+    });
+  });
+}
+
+/* Fast 2-Field Callback Request Widget */
+function initQuickCallbackForm() {
+  const form = document.getElementById("quick-callback-form");
+  const successBox = document.getElementById("callback-success");
+  const submitBtn = document.getElementById("callback-submit-btn");
+  if (!form) return;
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const phoneInput = form.querySelector("#callback-phone");
+    const issueSelect = form.querySelector("#callback-issue");
+    const phone = phoneInput ? phoneInput.value.trim() : "";
+    const issue = issueSelect && issueSelect.value ? issueSelect.value : "Dryer Service Request";
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = "Callback Queued ✓";
+      submitBtn.style.background = "#059669";
+    }
+
+    if (successBox) {
+      successBox.innerHTML = `&#10003; <strong>Request Received!</strong> A Bayfront Sarasota dispatcher has received your alert for <b>${phone || "your number"}</b> (${issue}). Our active crew is reviewing and will call you in <b>under 5 minutes</b>.`;
+      successBox.classList.add("is-visible");
+    }
+  });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -310,5 +398,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initLeadForms();
   initReveal();
   initLandmarkNeighborhoods();
+  initQuickCallbackForm();
 });
 
