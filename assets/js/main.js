@@ -254,7 +254,7 @@ function initLandmarkNeighborhoods() {
     chips.forEach((chip) => {
       chip.addEventListener("click", (e) => {
         e.stopPropagation();
-        window.location.href = "tel:9411234567";
+        window.location.href = "tel:9412889768";
       });
     });
   });
@@ -301,7 +301,7 @@ function initLandmarkNeighborhoods() {
 
     if (countTag) {
       if (matchCount === 0) {
-        countTag.textContent = `0 matches for "${query}" — Call 941-123-4567 for any Sarasota ZIP`;
+        countTag.textContent = `0 matches for "${query}" — Call 941-288-9768 for any Sarasota ZIP`;
       } else {
         countTag.textContent = `Found ${matchCount} matching hub${matchCount > 1 ? "s" : ""} in service area`;
       }
