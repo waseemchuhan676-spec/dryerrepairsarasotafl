@@ -5299,7 +5299,7 @@ small {
 }
 
 /* ============================================================================
-   SERVICE AREAS NAVIGATION DROPDOWN
+   ULTRA-PREMIUM MEGA-DROPDOWN MENU
    ============================================================================ */
 .nav-item-dropdown {
   position: relative;
@@ -5307,15 +5307,27 @@ small {
   align-items: center;
 }
 
+/* Invisible bridge preventing hover loss */
+.nav-item-dropdown::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 20px;
+  z-index: 998;
+}
+
 .nav-dropdown-trigger {
   display: inline-flex !important;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   cursor: pointer;
+  user-select: none;
 }
 
 .dropdown-chevron {
-  transition: transform 180ms ease, stroke 180ms ease;
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1), stroke 180ms ease;
   margin-top: -1px;
 }
 
@@ -5332,46 +5344,55 @@ small {
 
 .nav-dropdown-menu {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 4px);
   left: 50%;
-  transform: translateX(-50%) translateY(10px);
-  width: 580px;
-  background: var(--paper);
-  border: 1px solid var(--line);
+  transform: translateX(-50%) translateY(10px) scale(0.98);
+  width: 680px;
+  background: #ffffff;
+  border: 1px solid rgba(11, 30, 58, 0.1);
   border-top: 3px solid var(--red);
-  border-radius: 0 0 10px 10px;
-  box-shadow: 0 20px 48px rgba(11, 30, 58, 0.16);
-  padding: 16px 18px;
+  border-radius: 14px;
+  box-shadow: 
+    0 24px 60px -10px rgba(11, 30, 58, 0.22),
+    0 8px 24px -4px rgba(11, 30, 58, 0.08),
+    0 0 0 1px rgba(11, 30, 58, 0.04);
+  padding: 18px 20px 16px;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 200ms ease, transform 200ms ease, visibility 200ms ease;
+  transition: opacity 220ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 220ms cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 1000;
 }
 
-/* Hover & Focus display */
+/* Smooth reveal */
 .nav-item-dropdown:hover .nav-dropdown-menu,
 .nav-item-dropdown:focus-within .nav-dropdown-menu {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: translateX(-50%) translateY(0);
+  transform: translateX(-50%) translateY(0) scale(1);
 }
 
 .nav-dropdown-menu a::after {
   display: none !important;
 }
 
+/* Header bar */
 .nav-dropdown-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 10px;
+  padding-bottom: 12px;
   margin-bottom: 12px;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid #edf2f7;
 }
 
-.nav-dropdown-header span {
+.nav-dropdown-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-family: var(--heading);
   font-size: 0.76rem;
   font-weight: 800;
@@ -5380,85 +5401,162 @@ small {
   color: var(--navy);
 }
 
-.nav-dropdown-header a {
-  padding: 0 !important;
-  font-size: 0.76rem !important;
+.nav-dropdown-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: navPulse 2s infinite;
+}
+
+@keyframes navPulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+.nav-dropdown-header .nav-dropdown-view-all {
+  padding: 4px 10px !important;
+  font-size: 0.74rem !important;
   color: var(--red) !important;
   letter-spacing: 0.04em;
   font-weight: 800;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
+  background: var(--accent-tint);
+  border-radius: 6px;
+  transition: all 180ms ease;
 }
 
-.nav-dropdown-header a:hover {
-  color: var(--red-dark) !important;
-  text-decoration: underline;
+.nav-dropdown-header .nav-dropdown-view-all:hover {
+  background: var(--red);
+  color: #ffffff !important;
 }
 
+/* 2-column grid */
 .nav-dropdown-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 8px 12px;
 }
 
+/* Dropdown card item */
 .nav-dropdown-item {
   display: flex !important;
-  flex-direction: column;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 12px !important;
   padding: 9px 12px !important;
-  border-radius: 8px;
-  background: var(--cream);
-  border: 1px solid transparent;
+  border-radius: 9px;
+  background: #f8fafc;
+  border: 1px solid #eef2f6;
   text-decoration: none;
-  transition: background 150ms ease, border-color 150ms ease, transform 150ms ease, box-shadow 150ms ease !important;
+  transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+  position: relative;
 }
 
-.nav-dropdown-item strong {
+.nav-dropdown-icon {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: var(--navy);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 180ms ease;
+}
+
+.nav-dropdown-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.nav-dropdown-content strong {
   font-family: var(--heading);
   font-size: 0.94rem;
   font-weight: 700;
   text-transform: uppercase;
   color: var(--navy);
   letter-spacing: 0.02em;
-  line-height: 1.2;
+  line-height: 1.25;
   transition: color 150ms ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.nav-dropdown-item span {
+.nav-dropdown-content span {
   font-family: var(--body);
-  font-size: 0.73rem;
-  color: var(--muted);
+  font-size: 0.72rem;
+  color: #64748b;
   line-height: 1.35;
-  margin-top: 3px;
+  margin-top: 2px;
   text-transform: none;
   letter-spacing: normal;
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* Hover state on card */
 .nav-dropdown-item:hover {
   background: #ffffff !important;
   border-color: rgba(var(--accent-rgb), 0.35) !important;
-  transform: translateX(3px);
-  box-shadow: 0 4px 14px rgba(11, 30, 58, 0.07);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(11, 30, 58, 0.08);
+}
+
+.nav-dropdown-item:hover .nav-dropdown-icon {
+  background: var(--red);
+  border-color: var(--red);
+  color: #ffffff;
+  transform: scale(1.05);
 }
 
 .nav-dropdown-item:hover strong {
   color: var(--red);
 }
 
+/* All / Special item */
 .nav-dropdown-item.nav-dropdown-all {
-  background: rgba(var(--accent-rgb), 0.06);
-  border: 1px dashed rgba(var(--accent-rgb), 0.3);
+  background: rgba(var(--accent-rgb), 0.05);
+  border: 1px dashed rgba(var(--accent-rgb), 0.35);
+}
+
+.nav-dropdown-item.nav-dropdown-all .nav-dropdown-icon {
+  background: rgba(var(--accent-rgb), 0.1);
+  border-color: rgba(var(--accent-rgb), 0.2);
+  color: var(--red);
 }
 
 .nav-dropdown-item.nav-dropdown-all strong {
   color: var(--red);
 }
 
+/* Footer Banner */
 .nav-dropdown-footer {
   margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px solid var(--line);
+  padding: 10px 14px;
+  background: #f1f5f9;
+  border-radius: 9px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -5466,21 +5564,38 @@ small {
 
 .nav-dropdown-footer-call {
   font-size: 0.76rem;
-  color: var(--muted);
+  color: #475569;
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.nav-dropdown-footer-call svg {
+  color: var(--red);
 }
 
 .nav-dropdown-footer-call a {
   padding: 0 !important;
   color: var(--navy) !important;
   font-weight: 800 !important;
-  font-size: 0.82rem !important;
+  font-size: 0.84rem !important;
+  transition: color 150ms ease;
 }
 
 .nav-dropdown-footer-call a:hover {
   color: var(--red) !important;
+}
+
+.nav-dropdown-footer-pill {
+  font-family: var(--heading);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #0f766e;
+  background: #ccfbf1;
+  padding: 3px 8px;
+  border-radius: 5px;
 }
 
 /* Mobile adjustments */
