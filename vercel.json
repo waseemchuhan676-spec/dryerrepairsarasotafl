@@ -153,6 +153,11 @@
       "source": "/dryer-repair-osprey.html",
       "destination": "/dryer-repair-osprey",
       "permanent": true
+    },
+    {
+      "source": "/blog/7-signs-your-dryer-needs-repair-in-sarasota.html",
+      "destination": "/blog/7-signs-your-dryer-needs-repair-in-sarasota",
+      "permanent": true
     }
   ]
 }

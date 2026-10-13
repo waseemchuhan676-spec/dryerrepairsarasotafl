@@ -371,22 +371,212 @@ function initQuickCallbackForm() {
   const submitBtn = document.getElementById("callback-submit-btn");
   if (!form) return;
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const phoneInput = form.querySelector("#callback-phone");
     const issueSelect = form.querySelector("#callback-issue");
     const phone = phoneInput ? phoneInput.value.trim() : "";
     const issue = issueSelect && issueSelect.value ? issueSelect.value : "Dryer Service Request";
 
+    // Strict validation
+    const digitsOnly = phone.replace(/\D/g, "");
+    if (digitsOnly.length < 10) {
+      if (phoneInput) {
+        phoneInput.focus();
+        phoneInput.setCustomValidity("Please enter a valid 10-digit phone number (e.g. 941-288-9768).");
+        phoneInput.reportValidity();
+      }
+      return;
+    }
+    if (phoneInput) phoneInput.setCustomValidity("");
+
+    const originalBtnText = submitBtn ? submitBtn.innerHTML : "Request Callback";
     if (submitBtn) {
       submitBtn.disabled = true;
-      submitBtn.innerHTML = "Callback Queued ✓";
-      submitBtn.style.background = "#059669";
+      submitBtn.innerHTML = "Submitting request...";
     }
 
-    if (successBox) {
-      successBox.innerHTML = `&#10003; <strong>Request Received!</strong> A Bayfront Sarasota dispatcher has received your alert for <b>${phone || "your number"}</b> (${issue}). Our active crew is reviewing and will call you in <b>under 5 minutes</b>.`;
-      successBox.classList.add("is-visible");
+    const cfg = leadsConfig();
+    const payload = {
+      phone: phone,
+      issue: issue,
+      pageUrl: window.location.href,
+      formType: "quick_callback",
+      timestamp: new Date().toISOString()
+    };
+
+    let submissionConfirmed = false;
+    if (cfg && cfg.apiBase && cfg.siteId) {
+      try {
+        const response = await fetch(cfg.apiBase + "/api/leads/" + encodeURIComponent(cfg.siteId), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+          keepalive: true
+        });
+        if (response.ok) {
+          submissionConfirmed = true;
+        }
+      } catch (_err) {
+        submissionConfirmed = false;
+      }
+    }
+
+    if (submissionConfirmed) {
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = "Request Submitted ✓";
+        submitBtn.style.background = "#059669";
+      }
+      if (successBox) {
+        // Safe DOM manipulation - avoid innerHTML with unescaped input
+        while (successBox.firstChild) {
+          successBox.removeChild(successBox.firstChild);
+        }
+        const strong = document.createElement("strong");
+        strong.textContent = "Callback Request Submitted. ";
+        const text1 = document.createTextNode("A local Sarasota dispatcher has received your inquiry for ");
+        const phoneStrong = document.createElement("strong");
+        phoneStrong.textContent = phone;
+        const text2 = document.createTextNode(" regarding " + issue + ". We will review your unit details and contact you promptly.");
+
+        successBox.style.color = "";
+        successBox.style.borderColor = "";
+        successBox.appendChild(strong);
+        successBox.appendChild(text1);
+        successBox.appendChild(phoneStrong);
+        successBox.appendChild(text2);
+        successBox.classList.add("is-visible");
+      }
+    } else {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+      }
+      if (successBox) {
+        while (successBox.firstChild) {
+          successBox.removeChild(successBox.firstChild);
+        }
+        const errStrong = document.createElement("strong");
+        errStrong.textContent = "Notice: ";
+        const errText = document.createTextNode(
+          "We could not confirm online submission at this moment. Please call our Sarasota dispatch desk directly at 941 288 9768 for immediate scheduling."
+        );
+        successBox.style.color = "#b91c1c";
+        successBox.style.borderColor = "#f87171";
+        successBox.appendChild(errStrong);
+        successBox.appendChild(errText);
+        successBox.classList.add("is-visible");
+      }
+    }
+  });
+}
+
+/* Contact Page Service Request Form Handler */
+function initContactServiceForm() {
+  const form = document.getElementById("contact-service-form");
+  const statusBox = document.getElementById("contact-form-status");
+  const submitBtn = document.getElementById("contact-submit-btn");
+  if (!form) return;
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const nameInput = form.querySelector("#contact-name");
+    const phoneInput = form.querySelector("#contact-phone");
+    const locInput = form.querySelector("#contact-location");
+    const issueSelect = form.querySelector("#contact-issue");
+    const notesInput = form.querySelector("#contact-notes");
+
+    const name = nameInput ? nameInput.value.trim() : "";
+    const phone = phoneInput ? phoneInput.value.trim() : "";
+    const neighborhood = locInput ? locInput.value.trim() : "";
+    const issue = issueSelect && issueSelect.value ? issueSelect.value : "General Dryer Repair";
+    const notes = notesInput ? notesInput.value.trim() : "";
+
+    const digitsOnly = phone.replace(/\D/g, "");
+    if (digitsOnly.length < 10) {
+      if (phoneInput) {
+        phoneInput.focus();
+        phoneInput.setCustomValidity("Please enter a valid 10-digit phone number (e.g. 941-288-9768).");
+        phoneInput.reportValidity();
+      }
+      return;
+    }
+    if (phoneInput) phoneInput.setCustomValidity("");
+
+    const originalBtnText = submitBtn ? submitBtn.innerHTML : "Submit Service Request";
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = "Submitting request...";
+    }
+
+    const cfg = leadsConfig();
+    const payload = {
+      name: name,
+      phone: phone,
+      neighborhood: neighborhood,
+      issue: issue,
+      notes: notes,
+      pageUrl: window.location.href,
+      formType: "contact_page",
+      timestamp: new Date().toISOString()
+    };
+
+    let confirmed = false;
+    if (cfg && cfg.apiBase && cfg.siteId) {
+      try {
+        const response = await fetch(cfg.apiBase + "/api/leads/" + encodeURIComponent(cfg.siteId), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+          keepalive: true
+        });
+        if (response.ok) {
+          confirmed = true;
+        }
+      } catch (_err) {
+        confirmed = false;
+      }
+    }
+
+    if (confirmed) {
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = "Request Received ✓";
+        submitBtn.style.background = "#059669";
+      }
+      if (statusBox) {
+        while (statusBox.firstChild) {
+          statusBox.removeChild(statusBox.firstChild);
+        }
+        const strong = document.createElement("strong");
+        strong.textContent = "Thank you! ";
+        const txt = document.createTextNode("Your service request has been received. Our Sarasota dispatch desk will contact you at " + phone + " promptly.");
+        statusBox.style.display = "block";
+        statusBox.style.color = "#065f46";
+        statusBox.style.border = "1px solid #10b981";
+        statusBox.appendChild(strong);
+        statusBox.appendChild(txt);
+      }
+      form.reset();
+    } else {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+      }
+      if (statusBox) {
+        while (statusBox.firstChild) {
+          statusBox.removeChild(statusBox.firstChild);
+        }
+        const strong = document.createElement("strong");
+        strong.textContent = "Notice: ";
+        const txt = document.createTextNode("Unable to confirm online submission at this moment. Please call our Sarasota dispatch desk directly at 941 288 9768.");
+        statusBox.style.display = "block";
+        statusBox.style.color = "#b91c1c";
+        statusBox.style.border = "1px solid #f87171";
+        statusBox.appendChild(strong);
+        statusBox.appendChild(txt);
+      }
     }
   });
 }
@@ -399,5 +589,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initReveal();
   initLandmarkNeighborhoods();
   initQuickCallbackForm();
+  initContactServiceForm();
 });
+
 
