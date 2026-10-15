@@ -158,6 +158,16 @@
       "source": "/blog/7-signs-your-dryer-needs-repair-in-sarasota.html",
       "destination": "/blog/7-signs-your-dryer-needs-repair-in-sarasota",
       "permanent": true
+    },
+    {
+      "source": "/commercial-dryer-repair.html",
+      "destination": "/commercial-dryer-repair",
+      "permanent": true
+    },
+    {
+      "source": "/dryer-burning-smell-repair.html",
+      "destination": "/dryer-burning-smell-repair",
+      "permanent": true
     }
   ]
 }

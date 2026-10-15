@@ -9,7 +9,7 @@ ErrorDocument 404 /404.html
   RewriteEngine On
   RewriteBase /
 
-  # /services/roof-repair -> services/roof-repair.html (internal, no redirect)
+  # Clean URL rewriting: /services -> services.html (internal, no redirect)
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME}\.html -f
