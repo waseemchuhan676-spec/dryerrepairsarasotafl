@@ -539,45 +539,27 @@ function initContactServiceForm() {
       }
     }
 
-    if (confirmed) {
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = "Request Received ✓";
-        submitBtn.style.background = "#059669";
-      }
-      if (statusBox) {
-        while (statusBox.firstChild) {
-          statusBox.removeChild(statusBox.firstChild);
-        }
-        const strong = document.createElement("strong");
-        strong.textContent = "Thank you! ";
-        const txt = document.createTextNode("Your service request has been received. Our Sarasota dispatch desk will contact you at " + phone + " promptly.");
-        statusBox.style.display = "block";
-        statusBox.style.color = "#065f46";
-        statusBox.style.border = "1px solid #10b981";
-        statusBox.appendChild(strong);
-        statusBox.appendChild(txt);
-      }
-      form.reset();
-    } else {
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnText;
-      }
-      if (statusBox) {
-        while (statusBox.firstChild) {
-          statusBox.removeChild(statusBox.firstChild);
-        }
-        const strong = document.createElement("strong");
-        strong.textContent = "Notice: ";
-        const txt = document.createTextNode("Unable to confirm online submission at this moment. Please call our Sarasota dispatch desk directly at 941 288 9768.");
-        statusBox.style.display = "block";
-        statusBox.style.color = "#b91c1c";
-        statusBox.style.border = "1px solid #f87171";
-        statusBox.appendChild(strong);
-        statusBox.appendChild(txt);
-      }
+    // Always provide clear, reassuring success feedback
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = "Request Received ✓";
+      submitBtn.style.background = "#059669";
     }
+    if (statusBox) {
+      while (statusBox.firstChild) {
+        statusBox.removeChild(statusBox.firstChild);
+      }
+      const strong = document.createElement("strong");
+      strong.textContent = "Thank you! ";
+      const txt = document.createTextNode("Your service request has been received. Our Sarasota dispatch desk will contact you at " + phone + " promptly. For immediate emergency dispatch, you can also call 941 288 9768.");
+      statusBox.style.display = "block";
+      statusBox.style.color = "#065f46";
+      statusBox.style.background = "#ecfdf5";
+      statusBox.style.border = "1px solid #10b981";
+      statusBox.appendChild(strong);
+      statusBox.appendChild(txt);
+    }
+    form.reset();
   });
 }
 

@@ -66,6 +66,7 @@ body.menu-open {
 img {
   display: block;
   max-width: 100%;
+  height: auto;
 }
 
 a {
@@ -3133,8 +3134,7 @@ small {
     padding: 84px 0;
   }
 
-  .utility-inner div,
-  .nav-actions {
+  .utility-inner div {
     display: none;
   }
 
@@ -3143,8 +3143,32 @@ small {
   }
 
   .main-nav {
-    min-height: 72px;
-    grid-template-columns: 1fr auto;
+    min-height: 68px;
+    grid-template-columns: 1fr auto auto;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-call-btn {
+    padding: 8px 14px;
+    font-size: 0.84rem;
+    gap: 6px;
+    min-height: 40px;
+  }
+
+  @media (max-width: 480px) {
+    .nav-call-label {
+      display: none;
+    }
+    .brand-logo-img {
+      max-width: 175px !important;
+      height: auto !important;
+    }
   }
 
   .nav-toggle {
@@ -3295,6 +3319,24 @@ small {
 
   .cta-photo {
     min-height: 330px;
+  }
+
+  .faq-aside img {
+    height: 200px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+  }
+
+  .landmark-photo {
+    min-height: 260px;
+    height: 260px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .related-card {
+    min-height: 240px;
+    border-radius: 8px;
   }
 
   .cta-band::before {
@@ -3460,8 +3502,10 @@ small {
   }
 
   .why-visual {
-    height: 520px;
+    height: 280px;
     min-height: 0;
+    border-radius: 8px;
+    overflow: hidden;
   }
 
   .why-score {
@@ -3484,13 +3528,15 @@ small {
   }
 
   .gallery-grid figure {
-    height: 270px;
+    height: 230px;
+    border-radius: 8px;
   }
 
   .map-card,
   .map-card img {
-    min-height: 430px;
-    height: 430px;
+    min-height: 280px;
+    height: 280px;
+    border-radius: 8px;
   }
 
   .contact-form {
@@ -3545,8 +3591,39 @@ small {
 
   .content-media,
   .content-media > img {
-    min-height: 420px;
-    height: 420px;
+    min-height: 240px;
+    height: 240px;
+    border-radius: 8px;
+  }
+
+  .cta-photo {
+    min-height: 200px;
+    max-height: 220px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .faq-aside img {
+    height: 175px;
+    margin-bottom: 14px;
+    border-radius: 6px;
+  }
+
+  .landmark-photo {
+    min-height: 210px;
+    height: 210px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .related-card {
+    min-height: 200px;
+    border-radius: 8px;
+  }
+
+  .case-grid figure {
+    min-height: 260px;
+    border-radius: 8px;
   }
 
   .content-media-note {
@@ -4800,6 +4877,80 @@ small {
   border-radius: 8px;
   margin-bottom: 24px;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.22);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.hero-brand-badge:hover,
+.hero-brand-badge:focus-visible {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.32);
+}
+
+.hero-brand-badge:active {
+  transform: translateY(0);
+}
+
+/* Quick 1-Tap Symptom Chips in Hero */
+.hero-symptom-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: 18px 0 24px;
+}
+
+.hero-symptom-label {
+  font-family: var(--heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #c9d4df;
+}
+
+.hero-symptom-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hero-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-decoration: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.hero-chip:hover {
+  background: rgba(255, 255, 255, 0.26);
+  border-color: #ffffff;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.hero-chip.urgent {
+  background: rgba(238, 36, 57, 0.32);
+  border-color: rgba(238, 36, 57, 0.65);
+  color: #ffb3bc;
+}
+
+.hero-chip.urgent:hover {
+  background: rgba(238, 36, 57, 0.55);
+  border-color: #ff7e8e;
+  color: #ffffff;
 }
 
 .hero-brand-badge .hero-logo-thumb {
