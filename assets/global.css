@@ -35,6 +35,7 @@
   --yellow: #ffc857;
   --heading: "Archivo Narrow", sans-serif;
   --body: "Manrope", sans-serif;
+  --font: var(--body);
   --shadow: 0 18px 60px rgba(9, 30, 57, 0.14);
 }
 
@@ -3125,7 +3126,7 @@ small {
   }
 }
 
-@media (max-width: 850px) {
+@media (max-width: 960px) {
   .shell {
     width: min(100% - 36px, 700px);
   }
@@ -5751,6 +5752,23 @@ small {
 
 /* Mobile adjustments */
 @media (max-width: 960px) {
+  /* iOS Safari Auto-Zoom Fix (Must be >= 16px to prevent automatic zooming on input focus) */
+  input,
+  select,
+  textarea,
+  .callback-select,
+  #gmap-landmark-search {
+    font-size: 16px !important;
+  }
+
+  /* Sticky Dispatch Call Button: extended to 960px with safe area insets */
+  .sticky-call {
+    display: flex !important;
+    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+    right: calc(18px + env(safe-area-inset-right, 0px));
+    touch-action: manipulation;
+  }
+
   .nav-item-dropdown {
     display: flex;
     flex-direction: column;
@@ -5763,8 +5781,18 @@ small {
     padding: 14px 0 !important;
     justify-content: space-between;
     width: 100%;
+    cursor: pointer;
   }
 
+  .nav-dropdown-trigger .dropdown-chevron {
+    transition: transform 0.25s ease;
+  }
+
+  .nav-item-dropdown.is-open .nav-dropdown-trigger .dropdown-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Collapsible mobile accordion drawer for mega dropdowns */
   .nav-dropdown-menu {
     position: static;
     transform: none !important;
@@ -5773,11 +5801,23 @@ small {
     border: none;
     border-top: 1px solid var(--line);
     border-radius: 0;
-    padding: 10px 0 14px;
+    padding: 0;
+    margin: 0;
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    pointer-events: none;
+    background: transparent;
+    transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.25s ease;
+  }
+
+  .nav-item-dropdown.is-open .nav-dropdown-menu {
+    max-height: 2000px;
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    background: transparent;
+    padding: 10px 0 14px;
   }
 
   .nav-dropdown-grid {
@@ -5789,6 +5829,28 @@ small {
     background: #f7f9fa;
   }
 }
+
+/* Touch targets and chip sizing on mobile phones */
+@media (max-width: 640px) {
+  .hero-chip {
+    min-height: 42px;
+    padding: 9px 15px;
+    font-size: 0.88rem;
+    touch-action: manipulation;
+  }
+  .zip-pill {
+    min-height: 38px;
+    padding: 8px 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+  }
+  .nav-toggle {
+    touch-action: manipulation;
+  }
+}
+
 
 
 

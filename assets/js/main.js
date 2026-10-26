@@ -16,11 +16,35 @@ function initNavigation() {
     toggle.setAttribute("aria-expanded", String(open));
     menu.classList.toggle("open", open);
     document.body.classList.toggle("menu-open", open);
+    if (!open) {
+      menu.querySelectorAll(".nav-item-dropdown").forEach((item) => {
+        item.classList.remove("is-open");
+      });
+    }
   };
   toggle.addEventListener("click", () => {
     setOpen(toggle.getAttribute("aria-expanded") !== "true");
   });
-  menu.querySelectorAll("a").forEach((link) => {
+
+  // Mobile accordion toggle for mega dropdowns
+  menu.querySelectorAll(".nav-dropdown-trigger").forEach((trigger) => {
+    trigger.addEventListener("click", (e) => {
+      if (window.innerWidth <= 960) {
+        e.preventDefault();
+        e.stopPropagation();
+        const parent = trigger.closest(".nav-item-dropdown");
+        if (parent) {
+          const isOpen = parent.classList.contains("is-open");
+          menu.querySelectorAll(".nav-item-dropdown").forEach((item) => {
+            if (item !== parent) item.classList.remove("is-open");
+          });
+          parent.classList.toggle("is-open", !isOpen);
+        }
+      }
+    });
+  });
+
+  menu.querySelectorAll("a:not(.nav-dropdown-trigger)").forEach((link) => {
     link.addEventListener("click", () => setOpen(false));
   });
   document.addEventListener("keydown", (event) => {
@@ -309,8 +333,12 @@ function initLandmarkNeighborhoods() {
   };
 
   if (searchInput) {
+    let searchDebounceTimer;
     searchInput.addEventListener("input", (e) => {
-      filterCards(e.target.value);
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(() => {
+        filterCards(e.target.value);
+      }, 150);
     });
 
     if (clearBtn) {
