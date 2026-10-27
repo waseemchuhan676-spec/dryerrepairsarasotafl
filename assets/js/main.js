@@ -365,7 +365,7 @@ function initLandmarkNeighborhoods() {
     pill.addEventListener("click", () => {
       const zip = pill.getAttribute("data-zip") || "";
       const zone = pill.getAttribute("data-zone") || zip;
-      const eta = pill.getAttribute("data-eta") || "10-15 min";
+      const eta = pill.getAttribute("data-eta") || "Active Sarasota Service Route";
 
       zipPills.forEach((p) => p.classList.remove("active"));
       pill.classList.add("active");
@@ -376,7 +376,7 @@ function initLandmarkNeighborhoods() {
         if (clearBtn) clearBtn.hidden = true;
         if (zipResult) {
           if (zipResultName) zipResultName.textContent = "All Sarasota County Service Hubs";
-          if (zipResultEta) zipResultEta.textContent = "Same-Day Priority Mobile Response";
+          if (zipResultEta) zipResultEta.textContent = "Sarasota County Mobile Service Route";
           zipResult.classList.add("is-active");
         }
       } else {
