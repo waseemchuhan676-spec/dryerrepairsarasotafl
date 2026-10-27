@@ -784,13 +784,15 @@
 
         <div class="callback-widget-card" id="callback-widget">
           <div class="callback-widget-head">
-            <h3>⚡ Or Request a 5-Minute Callback</h3>
+            <h3>⚡ Or Request a Prompt Callback</h3>
             <p>Prefer not to call right now? A local Sarasota dispatcher will contact you promptly to discuss your service needs.</p>
           </div>
           <form class="callback-form" id="quick-callback-form" data-rl-lead>
             <div class="callback-form-grid">
-              <input type="tel" class="callback-input" name="phone" id="callback-phone" placeholder="Phone Number (e.g. 941-xxx-xxxx)" required />
-              <select class="callback-select" name="issue" id="callback-issue" required>
+              <label for="callback-phone" class="sr-only">Phone Number</label>
+              <input type="tel" class="callback-input" name="phone" id="callback-phone" placeholder="Phone Number (e.g. 941-xxx-xxxx)" autocomplete="tel" aria-label="Phone Number" required />
+              <label for="callback-issue" class="sr-only">Select Dryer Problem</label>
+              <select class="callback-select" name="issue" id="callback-issue" aria-label="Select Dryer Problem" required>
                 <option value="">Select Dryer Problem</option>
                 <option value="Not Heating">Dryer Not Heating</option>
                 <option value="Not Spinning">Drum Won't Spin</option>
@@ -802,7 +804,7 @@
               </select>
             </div>
             <button type="submit" class="callback-btn-submit" id="callback-submit-btn">
-              <span>Request Fast Callback</span> &rarr;
+              <span>Request Callback</span> &rarr;
             </button>
           </form>
           <div class="callback-success-msg" id="callback-success">

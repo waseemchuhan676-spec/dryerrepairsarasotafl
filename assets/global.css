@@ -5833,14 +5833,14 @@ small {
 /* Touch targets and chip sizing on mobile phones */
 @media (max-width: 640px) {
   .hero-chip {
-    min-height: 42px;
-    padding: 9px 15px;
+    min-height: 44px;
+    padding: 10px 15px;
     font-size: 0.88rem;
     touch-action: manipulation;
   }
   .zip-pill {
-    min-height: 38px;
-    padding: 8px 14px;
+    min-height: 44px;
+    padding: 10px 14px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
