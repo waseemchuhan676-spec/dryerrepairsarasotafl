@@ -451,6 +451,7 @@ function initQuickCallbackForm() {
     }
 
     if (submissionConfirmed) {
+      trackConversionEvent("lead_form_submitted", { form_id: "quick-callback-form" });
       if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.innerHTML = "Request Submitted ✓";
@@ -561,6 +562,7 @@ function initContactServiceForm() {
         });
         if (response.ok) {
           confirmed = true;
+          trackConversionEvent("lead_form_submitted", { form_id: "contact-service-form" });
         }
       } catch (_err) {
         confirmed = false;
@@ -591,6 +593,32 @@ function initContactServiceForm() {
   });
 }
 
+/* Privacy-respecting conversion event tracker (Clarity & GA4) */
+function trackConversionEvent(eventName, eventDetails) {
+  try {
+    if (typeof window.clarity === "function") {
+      window.clarity("event", eventName);
+    }
+  } catch (_e) {}
+  try {
+    if (typeof window.gtag === "function") {
+      window.gtag("event", eventName, eventDetails || {});
+    }
+  } catch (_e) {}
+}
+
+function initClickToCallTracking() {
+  document.addEventListener("click", (e) => {
+    const telLink = e.target.closest('a[href^="tel:"]');
+    if (telLink) {
+      trackConversionEvent("click_to_call", {
+        event_category: "conversion",
+        event_label: "direct_phone_call"
+      });
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initNavigation();
   initOfferCodes();
@@ -600,6 +628,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initLandmarkNeighborhoods();
   initQuickCallbackForm();
   initContactServiceForm();
+  initClickToCallTracking();
 });
 
 
