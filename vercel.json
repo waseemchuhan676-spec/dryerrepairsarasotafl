@@ -165,6 +165,16 @@
       "permanent": true
     },
     {
+      "source": "/blog/dryer-vent-cleaning-sarasota-safety-guide.html",
+      "destination": "/blog/dryer-vent-cleaning-sarasota-safety-guide",
+      "permanent": true
+    },
+    {
+      "source": "/blog/why-dryer-takes-two-cycles-sarasota.html",
+      "destination": "/blog/why-dryer-takes-two-cycles-sarasota",
+      "permanent": true
+    },
+    {
       "source": "/commercial-dryer-repair.html",
       "destination": "/commercial-dryer-repair",
       "permanent": true
