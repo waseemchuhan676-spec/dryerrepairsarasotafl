@@ -183,6 +183,26 @@
       "source": "/dryer-burning-smell-repair.html",
       "destination": "/dryer-burning-smell-repair",
       "permanent": true
+    },
+    {
+      "source": "/products/dryer-repair-in-sarasota",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/blogs/dryer-repair-in-sarasota",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/pages/dryer-repair-in-sarasota",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/search",
+      "destination": "/",
+      "permanent": true
     }
   ],
   "headers": [
